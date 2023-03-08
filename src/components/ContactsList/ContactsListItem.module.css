@@ -1,0 +1,16 @@
+ul{
+    padding: 0;
+}
+
+.contactItem {
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.buttonDel {
+    padding: 2px;
+    cursor: pointer;
+    background-color:beige;
+    border-radius: 4px;
+}

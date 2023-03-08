@@ -1,50 +1,56 @@
-import React, { Component } from 'react';
+import { useState } from "react";
 import PropsType from 'prop-types';
 import style from './ContactsForm.module.css';
 import shortid from 'shortid';
 
-class ContactsForm extends Component {
-  initialState = {
+const ContactsForm = ({onSubmit}) => {
+  const initialState = {
     name: '',
     number: '',
   };
 
-  state = {
-    name: '',
-    number: '',
+  const [name, setName] = useState(initialState.name);
+  const [number, setNumber] = useState(initialState.number);
+  
+  const nameInputId = shortid.generate();
+  const numberInputId = shortid.generate();
+
+  const handleChange = e => {
+    const { name, value } = e.currentTarget;
+
+    switch (name) {
+      case 'name':
+        setName(value);
+        break;
+      case 'number':
+        setNumber(value);
+        break;
+      default:
+        return;
+    }
   };
 
-  nameInputId = shortid.generate();
-  numberInputId = shortid.generate();
-
-  handleChange = event => {
-    const { name, value } = event.currentTarget;
-    this.setState({ [name]: value });
-  };
-
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
     const contact = {
       id: shortid.generate(),
-      name: this.state.name,
-      number: this.state.number,
+      name: name,
+      number: number,
     };
 
-    this.props.onSubmit(contact);
+    onSubmit(contact);
 
-    this.reset();
+    reset();
   };
 
-  reset = () => {
-    this.setState(this.initialState);
+  const reset = () => {
+    setName(initialState.name);
+    setNumber(initialState.number);
   };
-
-  render() {
-    const { name, number } = this.state;
 
     return (
-      <form onSubmit={this.handleSubmit} className={style.form}>
-        <label htmlFor={this.nameInputId} className={style.label}>
+      <form onSubmit={handleSubmit} className={style.form}>
+        <label htmlFor={nameInputId} className={style.label}>
           Name
           <input
             type="text"
@@ -53,11 +59,11 @@ class ContactsForm extends Component {
             title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
             required
             value={name}
-            onChange={this.handleChange}
-            id={this.nameInputId}
+            onChange={handleChange}
+            id={nameInputId}
           />
         </label>
-        <label htmlFor={this.numberInputId} className={style.label}>
+        <label htmlFor={numberInputId} className={style.label}>
           Number
           <input
             type="tel"
@@ -66,8 +72,8 @@ class ContactsForm extends Component {
             title="Номер телефона должен состоять из цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
             required
             value={number}
-            onChange={this.handleChange}
-            id={this.numberInputId}
+            onChange={handleChange}
+            id={numberInputId}
           />
         </label>
         <button className={style.button} type="submit">
@@ -76,7 +82,7 @@ class ContactsForm extends Component {
       </form>
     );
   }
-}
+
 
 ContactsForm.PropsType = {
   onSubmit: PropsType.func.isRequired,

@@ -24,15 +24,11 @@ class App extends Component {
     }
   }
   
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(_, prevState) {
     if (this.state.contacts !== prevState.contacts) {
       localStorage.setItem('contactList', JSON.stringify(this.state.contacts))
     }
   }
-  
-  // componentWillUnmount() {
-  //   console.log('componentWillUnmount');
-  // }
 
   handleChange = event => {
     const { name, value } = event.currentTarget;
